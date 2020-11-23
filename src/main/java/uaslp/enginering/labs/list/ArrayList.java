@@ -1,5 +1,7 @@
 package uaslp.enginering.labs.list;
 
+import java.util.NoSuchElementException;
+
 public class ArrayList<T> {
 
     public enum InsertPosition {
@@ -46,19 +48,24 @@ public class ArrayList<T> {
         elements[lastIndex++] = element;
     }
 
-    public void delete(T element) {
+    public void delete(T element) throws NoSuchElementException {
         for (int index = 0; index < lastIndex; index++) {
             if (elements[index].equals(element)) {
                 delete(index);
                 break;
             }
+
+            throw new NoSuchElementException();
+
         }
     }
 
-    public void delete(int index) {
+    public void delete(int index) throws IndexOutOfBoundsException{
         if (lastIndex - index > 0 && index >= 0) {
             lastIndex--;
             System.arraycopy(elements, index + 1, elements, index, lastIndex - index);
+        } else{
+            throw new IndexOutOfBoundsException();
         }
     }
 
@@ -70,17 +77,22 @@ public class ArrayList<T> {
         return lastIndex;
     }
 
-    public T getAt(int index) {
-        return index < lastIndex ? (T)elements[index] : null;
+    public T getAt(int index) throws IndexOutOfBoundsException{
+        if(index < lastIndex) {
+            return (T) elements[index];
+        }
+        throw new IndexOutOfBoundsException();
     }
 
-    public void insert(T reference, T newStudent, InsertPosition insertPosition) {
+    public void insert(T reference, T newStudent, InsertPosition insertPosition) throws NoSuchElementException{
 
         if (lastIndex == elements.length) {
             increaseArraySize();
         }
 
-        for (int index = 0; index < lastIndex; index++) {
+        int index = 0;
+
+        for ( ; index < lastIndex; index++){
             if (elements[index].equals(reference)) {
                 if (insertPosition.equals(InsertPosition.BEFORE)) {
                     for (int j = lastIndex; j > index; j--) {
@@ -95,6 +107,10 @@ public class ArrayList<T> {
                 }
                 break;
             }
+        }
+
+        if(index == lastIndex){
+            throw new NoSuchElementException();
         }
         lastIndex++;
     }

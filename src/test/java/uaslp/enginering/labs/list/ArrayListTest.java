@@ -3,7 +3,10 @@ package uaslp.enginering.labs.list;
 import org.junit.jupiter.api.Test;
 import uaslp.enginering.labs.model.Student;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ArrayListTest {
 
@@ -107,6 +110,7 @@ public class ArrayListTest {
         assertEquals(arrayList.getAt(1).getName(), "Francisco");
     }
 
+    /*
     @Test
     public void givenAListWith3Elements_whenDeleteNegative_thenDoesNothing() {
         // Given:
@@ -126,6 +130,7 @@ public class ArrayListTest {
         assertEquals(arrayList.getAt(2).getName(), "Francisco");
     }
 
+
     @Test
     public void givenAListWith3Elements_whenDeleteOutOfSize_thenDoesNothing() {
         // Given:
@@ -143,7 +148,7 @@ public class ArrayListTest {
         assertEquals(arrayList.getAt(0).getName(), "Ivan");
         assertEquals(arrayList.getAt(1).getName(), "Israel");
         assertEquals(arrayList.getAt(2).getName(), "Francisco");
-    }
+    } */
 
     @Test
     public void givenAListWith3Elements_whenInsertAtBeginningBefore_thenElementIsInserted() {
@@ -303,5 +308,77 @@ public class ArrayListTest {
         assertEquals("Ivan", student.getName());
         assertFalse(iterator.hasNext());
         assertNull(iterator.next());
+    }
+
+    //New Tests
+
+    @Test
+    public void GivenATwoStudentsList_WhenDeleteAnInexistentStudent_ThenThrowsAnException(){
+        //Given:
+        ArrayList<Student> arrayList = new ArrayList<>();
+        Student studentA = new Student("Nero");
+        Student studentB = new Student("Virgil");
+        Student studentC = new Student("William");
+
+        arrayList.add(studentA);
+        arrayList.add(studentB);
+        //When:
+
+        //Then:
+        assertThatThrownBy(() -> arrayList.delete(studentC)).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    public void GivenAThreeStudentsList_WhenTheIndexToDeleteIsOutOfRange_ThenThrowsAnException(){
+        //Given:
+        ArrayList<Student> arrayList = new ArrayList<>();
+        Student studentA = new Student("Nero");
+        Student studentB = new Student("Virgil");
+        Student studentC = new Student("William");
+        int index = 4;
+
+        arrayList.add(studentA);
+        arrayList.add(studentB);
+        arrayList.add(studentC);
+
+        //When:
+
+        //Then:
+        assertThatThrownBy(() -> arrayList.delete(index)).isInstanceOf(IndexOutOfBoundsException.class);
+    }
+
+    @Test
+    public void GivenAThreeStudentsList_WhenASearchedIndexIsOutOfRange_ThenThrowsAnException(){
+        //Given:
+        ArrayList<Student> arrayList = new ArrayList<>();
+        Student studentA = new Student("Nero");
+        Student studentB = new Student("Virgil");
+        Student studentC = new Student("William");
+        int index = 5;
+
+        arrayList.add(studentA);
+        arrayList.add(studentB);
+        arrayList.add(studentC);
+
+        //When:
+
+        //Then:
+        assertThatThrownBy(() -> arrayList.getAt(index)).isInstanceOf(IndexOutOfBoundsException.class);
+    }
+
+    @Test
+    public void GivenAOneStudentList_WhenTheReferenceStudentIsInexistent_ThenThrowsAnException(){
+        //Given:
+        ArrayList<Student> arrayList = new ArrayList<>();
+        Student reference = new Student("Nero");
+        Student student = new Student("Virgil");
+        Student studentB = new Student("William");
+
+        arrayList.add(studentB);
+
+        //When:
+
+        //Then:
+        assertThatThrownBy(() -> arrayList.insert(reference,student,ArrayList.InsertPosition.AFTER)).isInstanceOf(NoSuchElementException.class);
     }
 }
